@@ -9,7 +9,7 @@ var handlePost = function (request, response) {
 	if (request.url == "/") {
 		var parsedUrl = url.parse(request.url, true);
 		
-		fs.writeFile(filename, queryUrl.query, function(err) {
+		fs.writeFile(filename, parsedUrl.query, function(err) {
 			if(err) {
 				console.log(err);
 			} else {
@@ -54,5 +54,5 @@ var server = http.createServer(function (request, response) {
 		handleGet(request, response);
 	}
 });
-server.listen(3639);
+server.listen(3639,'192.168.0.37');
 console.log("Listening on port 3639");
