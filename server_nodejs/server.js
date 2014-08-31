@@ -27,9 +27,9 @@ var handleGet = function (request, response) {
 	
 var server = http.createServer(function (request, response) {
 	if (request.method == 'POST') {
-		handlePost();
+		handlePost(request, response);
 	} else if (request.method == 'GET') {
-		handleGet();
+		handleGet(request, response);
 	}
 });
 server.listen(3639);
