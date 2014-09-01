@@ -1,0 +1,9 @@
+{
+  "name": "garage-door-server",
+  "version": "0.0.1",
+  "description": "A Node.JS server using express framework and socket.io to monitor open/close status of the garage door.",
+  "dependencies": {
+    "express": "^4.8.7",
+    "socket.io": "^1.0.6"
+  }
+}
