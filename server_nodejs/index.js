@@ -12,41 +12,41 @@ app.use( bodyParser.urlencoded() ); // to support URL-encoded bodies
 
 app.post('/', function(request, response){
   
+  /*
   var istream = JSON.stringify(request.body);
-  
   fs.writeFile(filename, istream, function(err) {
     if (err) throw err;
     //console.log("The file was saved!");
   });
-
+  */
+  
+  if (request.body.status == false) {
+    console.log("Closed");
+    io.emit('status changed', 'CLOSED');
+  } else {
+    console.log("Open");
+    io.emit('status changed', 'OPEN');
+  }
+  
   response.set('Content-Type', 'text/plain');
   response.send('');
 });
 
 app.get('/', function(request, response){
+  /*
   fs.readFile(filename, "utf8", function (err, data) {
     if (err) throw err;
     response.set('Content-Type', 'text/plain');
     response.send(data);
   });
+  */
     
-  //response.sendfile('index.html');
+  response.sendfile('index.html');
 });
 
 app.get('/test', function(request, response){
   response.set('Content-Type', 'text/plain');
   response.send('TESTING: I am alive.');
-});
-
-
-io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
-  });
 });
 
 http.listen(3639, '192.168.0.37', function(){
