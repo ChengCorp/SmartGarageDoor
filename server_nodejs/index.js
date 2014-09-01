@@ -1,66 +1,54 @@
-var http = require('http');
-var url = require('url');
-var queryString = require( "querystring" );
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var bodyParser = require('body-parser');
+
 var fs = require('fs');
 
 var filename = "data.txt";
 
-var handlePost = function (request, response) {
-	if (request.url == "/") {
-		var parsedUrl = url.parse(request.url, true);
-		var istream = "";
-		request.setEncoding('utf8');
-		request.on('data', function(chunk){
-			istream += chunk;
-		});
-		request.on("end", function() {
-			fs.writeFile(filename, istream, function(err) {
-				if(err) {
-					console.log(err);
-				} else {
-					console.log("The file was saved!");
-				}
-			});
-			response.writeHead(200, {"Content-Type":"text/html"});
-			response.end();
-		});
-	}
-}
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use( bodyParser.urlencoded() ); // to support URL-encoded bodies
 
-var handleGet = function (request, response) {
-	if (request.url == "/") {
-		
-		//var queryObj = queryString.parse ( parsedUrl.query );
-		
-		//var obj = JSON.parse( queryObj.jsonData );
-		
-		response.writeHead(200, {"Content-Type":"text/html"});
-		fs.readFile(filename, "utf8", function (err, data) {
-			if (err) throw err;
-			response.write(data);
-			response.end();
-		});
-		
-	} else if (request.url == "/test") {
-		response.writeHead(200, { 'content-type': 'text/plain' });
-		response.write("TESTING: I am alive.");
-		response.end();
-	} else {
-		response.writeHead(200, { 'content-type': 'text/plain' });
-		response.write("Wrong directory at " + request.url);
-		response.end();
-		console.log(request.url);
-	}
-}
+app.post('/', function(request, response){
+  
+  var istream = JSON.stringify(request.body);
+  
+  fs.writeFile(filename, istream, function(err) {
+    if (err) throw err;
+    //console.log("The file was saved!");
+  });
 
-	
-	
-var server = http.createServer(function (request, response) {
-	if (request.method == 'POST') {
-		handlePost(request, response);
-	} else if (request.method == 'GET') {
-		handleGet(request, response);
-	}
+  response.set('Content-Type', 'text/plain');
+  response.send('');
 });
-server.listen(3639,'192.168.0.37');
-console.log("Listening on port 3639");
+
+app.get('/', function(request, response){
+  fs.readFile(filename, "utf8", function (err, data) {
+    if (err) throw err;
+    response.set('Content-Type', 'text/plain');
+    response.send(data);
+  });
+    
+  //response.sendfile('index.html');
+});
+
+app.get('/test', function(request, response){
+  response.set('Content-Type', 'text/plain');
+  response.send('TESTING: I am alive.');
+});
+
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+});
+
+http.listen(3639, '192.168.0.37', function(){
+  console.log('listening on 192.168.0.37:3639');
+});
