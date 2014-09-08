@@ -5,8 +5,8 @@
 // Since what I want is a reed switch, I need to cycle the power pin on (for 10+ ms) and
 // off (for 10+ ms) to reset the sensor to unlatched state after latching.
 
-int sensor_pin = 13;
-int power_pin = 7;
+int sensor_pin = 7;
+int power_pin = 13;
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
