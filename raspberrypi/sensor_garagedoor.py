@@ -20,7 +20,7 @@ while 1 :
     #output = "{'status':'open'}"
 	
   if isOpen != prevFlag:
-    print("Changing flag");
+    print("Changing flag")
     statusStr = "status"
     headers = {'content-type': 'application/json'}
     output = {statusStr: isOpen}
