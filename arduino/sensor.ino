@@ -5,15 +5,16 @@
 // Since what I want is a reed switch, I need to cycle the power pin on (for 10+ ms) and
 // off (for 10+ ms) to reset the sensor to unlatched state after latching.
 
-int sensor_pin = 7;
+int open_pin = 2;
+
 int power_pin = 13;
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
   
-  // make the sensor_pin an input:
-  pinMode(sensor_pin, INPUT);
+  // make the open_pin an input:
+  pinMode(open_pin, INPUT);
   
   // make the power_pin an output to apply alternate power.
   pinMode(power_pin, OUTPUT);
@@ -27,7 +28,7 @@ void loop() {
   delay(50);
   
   // read the input pin:
-  int buttonState = digitalRead(sensor_pin);
+  int buttonState = digitalRead(open_pin);
   // print out the state of the button:
   Serial.println(buttonState);
   
