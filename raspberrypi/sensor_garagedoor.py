@@ -2,7 +2,8 @@ import serial
 import json
 import requests
 
-prevFlag = None;
+prevState = None
+currState = None
 isOpen = None
 
 url = "http://192.168.0.37:3639/"
@@ -10,16 +11,22 @@ url = "http://192.168.0.37:3639/"
 ser = serial.Serial('/dev/ttyACM0', 9600)
 
 while 1 : 
-  prevFlag = isOpen
-  #output = ""
-  if "0" in ser.readline():
+  prevState = isOpen
+
+  if "0" in ser.readline(): # open
     isOpen = False
-    #output = "{'status':'close'}"
-  elif '1' in ser.readline():
+    currState = 0
+  elif '1' in ser.readline(): # close
     isOpen = True
-    #output = "{'status':'open'}"
-	
-  if isOpen != prevFlag:
+    currState = 1
+  elif '2' in ser.readline(): # opening/closing
+    currState = 2
+  elif '3' in ser.readline(): # error occurred at arduino
+    currState = 3
+  else:                       # error occurred at raspberrypi/python
+    currState = 4
+
+  if isOpen != prevState:
     print("Changing flag")
     statusStr = "status"
     headers = {'content-type': 'application/json'}
