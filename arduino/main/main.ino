@@ -23,7 +23,9 @@ boolean bypass = true;
 int open_pin = 2;
 int close_pin = 3;
 
-int power_pin = 13;
+int power_pin = 12;
+
+int output_pin = 13; // for arduino led display
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
@@ -35,6 +37,8 @@ void setup() {
   
   // make the power_pin an output to apply alternate power.
   pinMode(power_pin, OUTPUT);
+  
+  pinMode(output_pin, OUTPUT);
 }
 
 // the loop routine runs over and over again forever:
@@ -55,7 +59,9 @@ void loop() {
   // print out the state of the door:
   if (!openState && closeState) { // close
     Serial.println(0);
+	igitalWrite(output_pin, LOW);
   } else if (openState && !closeState) { // open
+    digitalWrite(output_pin, HIGH);
     Serial.println(1);
   } else if (!openState && !closeState) { // opening/closing
     Serial.println(2);
