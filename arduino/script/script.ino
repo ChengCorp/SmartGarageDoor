@@ -21,42 +21,52 @@
 #define bypass true
 
 // Input pins
-#define top_sensor_pin 2
-#define bottom_sensor_pin 3
+#define topSensorPin 2
+#define bottomSensorPin 3
 
 // Output pins
-#define top_power_pin 11
-#define bottom_power_pin 12
+#define topPowerPin 11
+#define bottomPowerPin 12
 
-#define output_pin 13 // for arduino led display
+#define outputPin 13 // for arduino led display
 
-#define door_switch_pin 7
+#define switchPin 7
+
+// Constants
+#define powerCycle 50U
+
+
+void setupPins() {
+  // make the topSensorPin an input:
+  pinMode(topSensorPin, INPUT);
+  pinMode(bottomSensorPin, INPUT);
+  
+  // make the power_pin an output to apply alternate power.
+  pinMode(topPowerPin, OUTPUT);
+  pinMode(bottomPowerPin, OUTPUT);
+  
+  pinMode(outputPin, OUTPUT);
+  pinMode(switchPin, OUTPUT);
+}
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
   
-  // make the top_sensor_pin an input:
-  pinMode(top_sensor_pin, INPUT);
-  pinMode(bottom_sensor_pin, INPUT);
-  
-  // make the power_pin an output to apply alternate power.
-  pinMode(top_power_pin, OUTPUT);
-  pinMode(bottom_power_pin, OUTPUT);
-  
-  pinMode(output_pin, OUTPUT);
+  // setup input and output pins
+  setupPins();
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
 
   // apply power for 50 ms
-  digitalWrite(top_power_pin, HIGH);
+  digitalWrite(topPowerPin, HIGH);
   delay(50);
   
   // read the input pin:
-  int openState = digitalRead(top_sensor_pin);
-  int closeState = digitalRead(bottom_sensor_pin);
+  int openState = digitalRead(topSensorPin);
+  int closeState = digitalRead(bottomSensorPin);
   
   if (bypass) {
     closeState = !openState;
@@ -65,9 +75,9 @@ void loop() {
   // print out the state of the door:
   if (!openState && closeState) { // close
     Serial.println(0);
-    digitalWrite(output_pin, LOW);
+    digitalWrite(outputPin, LOW);
   } else if (openState && !closeState) { // open
-    digitalWrite(output_pin, HIGH);
+    digitalWrite(outputPin, HIGH);
     Serial.println(1);
   } else if (!openState && !closeState) { // opening/closing
     Serial.println(2);
@@ -76,7 +86,7 @@ void loop() {
   }
   
   // turn off power for reset.
-  digitalWrite(top_power_pin, LOW);
+  digitalWrite(topPowerPin, LOW);
   delay(50);
 }
 
