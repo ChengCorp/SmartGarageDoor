@@ -17,26 +17,32 @@
 // off (for 10+ ms) to reset the sensor to unlatched state after latching.
 //////////////////////////////////////////////////////////////////////////////////////////
 
+// Configuration setup
+#define bypass true
 
-boolean bypass = true;
+// Input pins
+#define top_sensor_pin 2
+#define bottom_sensor_pin 3
 
-int open_pin = 2;
-int close_pin = 3;
+// Output pins
+#define top_power_pin 11
+#define bottom_power_pin 12
 
-int power_pin = 12;
+#define output_pin 13 // for arduino led display
 
-int output_pin = 13; // for arduino led display
+#define door_switch_pin 7
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
   
-  // make the open_pin an input:
-  pinMode(open_pin, INPUT);
-  pinMode(close_pin, INPUT);
+  // make the top_sensor_pin an input:
+  pinMode(top_sensor_pin, INPUT);
+  pinMode(bottom_sensor_pin, INPUT);
   
   // make the power_pin an output to apply alternate power.
-  pinMode(power_pin, OUTPUT);
+  pinMode(top_power_pin, OUTPUT);
+  pinMode(bottom_power_pin, OUTPUT);
   
   pinMode(output_pin, OUTPUT);
 }
@@ -45,12 +51,12 @@ void setup() {
 void loop() {
 
   // apply power for 50 ms
-  digitalWrite(power_pin, HIGH);
+  digitalWrite(top_power_pin, HIGH);
   delay(50);
   
   // read the input pin:
-  int openState = digitalRead(open_pin);
-  int closeState = digitalRead(close_pin);
+  int openState = digitalRead(top_sensor_pin);
+  int closeState = digitalRead(bottom_sensor_pin);
   
   if (bypass) {
     closeState = !openState;
@@ -70,9 +76,7 @@ void loop() {
   }
   
   // turn off power for reset.
-  digitalWrite(power_pin, LOW);
+  digitalWrite(top_power_pin, LOW);
   delay(50);
 }
-
-
 
