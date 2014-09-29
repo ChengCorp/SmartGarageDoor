@@ -87,7 +87,7 @@ void transmitSensorInputs() {
   } else if (!openState && !closeState) { // opening/closing
     Serial.println(2);
   } else {
-    Serial.println(41); // error
+    Serial.println(3); // error
   }
 }
 
