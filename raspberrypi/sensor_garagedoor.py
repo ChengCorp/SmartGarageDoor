@@ -21,10 +21,10 @@ while 1 :
     currState = 1
   elif '2' in ser.readline(): # opening/closing
     currState = 2
-  elif '3' in ser.readline(): # error occurred at arduino
-    currState = 3
+  elif '401' in ser.readline(): # error occurred at arduino
+    currState = 41
   else:                       # error occurred at raspberrypi/python
-    currState = 4
+    currState = 42
 
   if isOpen != prevState:
     print("Changing flag")
