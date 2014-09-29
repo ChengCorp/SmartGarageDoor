@@ -34,6 +34,12 @@
 
 // Constants
 #define powerCycle 50U
+#define switchCycle 100U
+
+unsigned long powerLastMillis = 0;
+unsigned long switchLastMillis = 0;
+
+boolean powerState = false;
 
 
 void setupPins() {
@@ -49,21 +55,20 @@ void setupPins() {
   pinMode(switchPin, OUTPUT);
 }
 
-void setup() {
-  // initialize serial communication at 9600 bits per second:
-  Serial.begin(9600);
-  
-  // setup input and output pins
-  setupPins();
+// function taken from http://forum.arduino.cc/index.php/topic,5686.0.html
+boolean cycleCheck(unsigned long *lastMillis, unsigned int cycle) 
+{
+  unsigned long currentMillis = millis();
+  if(currentMillis - *lastMillis >= cycle)
+  {
+    *lastMillis = currentMillis;
+    return true;
+  }
+  else
+    return false;
 }
 
-// the loop routine runs over and over again forever:
-void loop() {
-
-  // apply power for 50 ms
-  digitalWrite(topPowerPin, HIGH);
-  delay(50);
-  
+void transmitSensorInputs() {
   // read the input pin:
   int openState = digitalRead(topSensorPin);
   int closeState = digitalRead(bottomSensorPin);
@@ -84,9 +89,49 @@ void loop() {
   } else {
     Serial.println(3); // error
   }
+}
+
+void oldloop() {
+
+  // apply power for 50 ms
+  digitalWrite(topPowerPin, HIGH);
+  delay(50);
+  
+  transmitSensorInputs();
   
   // turn off power for reset.
   digitalWrite(topPowerPin, LOW);
   delay(50);
+}
+
+void togglePower() {
+  powerState = !powerState;
+  digitalWrite(topPowerPin, powerState);
+  digitalWrite(bottomPowerPin, powerState);
+}
+
+void setup() {
+  // initialize serial communication at 9600 bits per second:
+  Serial.begin(9600);
+  
+  // setup input and output pins
+  setupPins();
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+  if(cycleCheck(&powerLastMillis, powerCycle))
+  {  
+    if (powerState == HIGH) {
+      transmitSensorInputs();
+    }
+	
+    togglePower();
+  }
+  
+  if (cycleCheck(&switchLastMillis, switchCycle))
+  {
+    // set switch pin
+  }
 }
 
