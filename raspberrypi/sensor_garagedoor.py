@@ -2,6 +2,9 @@ import serial
 import json
 import requests
 
+STATUS_STRING = "status"
+STATUSCODE_STRING = "statuscode"
+
 prevState = None
 currState = None
 isOpen = None
@@ -28,9 +31,8 @@ while 1 :
 
   if isOpen != prevState:
     print("Changing flag")
-    statusStr = "status"
     headers = {'content-type': 'application/json'}
-    output = {statusStr: isOpen}
+    output = {STATUS_STRING: isOpen}
     r = requests.post(url, data=json.dumps(output), headers=headers)
     print("Flag changed")
 
