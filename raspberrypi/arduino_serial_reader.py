@@ -1,6 +1,4 @@
 #!/usr/bin/python
-
-import serial
 import json
 import requests
 
@@ -49,7 +47,3 @@ class ArduinoSerialReader:
                 post_data = {self._STATUS_STRING: is_open, self._STATUSCODE_STRING: curr_state}
                 r = self.post_json(url, post_data)
                 # print("Flag changed")
-
-ser = serial.Serial('/dev/ttyACM0', 9600)
-arduino_serial_reader = ArduinoSerialReader()
-arduino_serial_reader.start(ser, "http://192.168.0.37:3639/")
