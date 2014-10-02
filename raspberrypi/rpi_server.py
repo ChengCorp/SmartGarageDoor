@@ -17,10 +17,10 @@ class myHandler(BaseHTTPRequestHandler):
         return
         
 class RPiServer:
-    def startServer(self, server_address):
+    def startServer(self, server_address, server_port):
 	    #Create a web server and define the handler to manage the
         #incoming request
-        server = HTTPServer(server_address, myHandler)
+        server = HTTPServer((server_address, server_port), myHandler)
         print 'Started httpserver on port ' , 1040
         
         #Wait forever for incoming http requests
