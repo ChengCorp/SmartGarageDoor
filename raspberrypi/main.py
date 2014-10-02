@@ -15,11 +15,11 @@ if __name__ == "__main__":
     arduinoSerialReader = ArduinoSerialReader()
     serialThread = threading.Thread(target = arduinoSerialReader.start, args = (SER, POST_URL))
     serialThread.setDaemon(True) # TODO: using setdaemon=true for now to , should look for alternative methods
-	serialThread.start()
+    serialThread.start()
 
     rpiServer = RPiServer()
     serverThread = threading.Thread(target = rpiServer.startServer, args = RPISERVER_ADDRESS)
-	serverThread.setDaemon(True)
+    serverThread.setDaemon(True)
     serverThread.start()
 
     try:

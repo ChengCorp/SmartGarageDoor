@@ -18,13 +18,13 @@ class myHandler(BaseHTTPRequestHandler):
         
 class RPiServer:
     def startServer(self, server_address, server_port):
-	    #Create a web server and define the handler to manage the
+        #Create a web server and define the handler to manage the
         #incoming request
         server = HTTPServer((server_address, server_port), myHandler)
         print 'Started httpserver on port ' , 1040
         
         #Wait forever for incoming http requests
         server.serve_forever()
-		
-	def terminateServer(self):
-		server.socket.close()
+        
+    def terminateServer(self):
+        server.socket.close()
