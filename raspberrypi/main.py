@@ -1,6 +1,6 @@
 #!/usr/bin/python
-import arduino_serial_reader import ArduinoSerialReader
-import rpi_server import RPiServer
+from arduino_serial_reader import ArduinoSerialReader
+from rpi_server import RPiServer
 
 import threading
 import serial
