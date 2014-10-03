@@ -17,7 +17,7 @@ if __name__ == "__main__":
     serialThread.setDaemon(True) # TODO: using setdaemon=true for now to , should look for alternative methods
     serialThread.start()
 
-    rpiServer = RPiServer()
+    rpiServer = RPiServer(SER)
     serverThread = threading.Thread(target = rpiServer.startServer, args = RPISERVER_ADDRESS)
     serverThread.setDaemon(True)
     serverThread.start()
