@@ -22,10 +22,5 @@ if __name__ == "__main__":
     serverThread.setDaemon(True)
     serverThread.start()
 
-    try:
-        while 1:
-            time.sleep(.1)
-    except KeyboardInterrupt:
-        serialThread.join()
-        serverThread.join()
-        print "threads successfully closed"
+    while 1:
+        time.sleep(.1)
