@@ -1,6 +1,10 @@
 #!/usr/bin/python
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 
+import serial
+
+SER = serial.Serial('/dev/ttyACM0', 9600)
+
 #This class will handles any incoming request from
 #the browser 
 class myHandler(BaseHTTPRequestHandler):
@@ -13,7 +17,7 @@ class myHandler(BaseHTTPRequestHandler):
         # Send the html message
         self.wfile.write("Hello World !")
         print "Yea"
-        ser.write('X');
+        SER.write('X');
         return
         
 class RPiServer:
