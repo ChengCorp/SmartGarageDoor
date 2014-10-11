@@ -139,6 +139,8 @@ void loop() {
   {
     // set switch pin
     digitalWrite(switchPin, HIGH);
+  } else {
+    digitalWrite(switchPin, LOW);
   }
 }
 
