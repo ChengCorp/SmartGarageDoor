@@ -34,13 +34,12 @@
 
 // Constants
 #define powerCycle 50U
-#define switchCycle 100U
+#define switchCycle 500U
 
 unsigned long powerLastMillis = 0;
-unsigned long switchLastMillis = 0;
+unsigned long switchOnUntilMillis = 0;
 
 boolean powerState = false;
-
 
 void setupPins() {
   // make the topSensorPin an input:
@@ -67,6 +66,13 @@ boolean cycleCheck(unsigned long *lastMillis, unsigned int cycle)
   else
     return false;
 }
+
+boolean timeCheck(unsigned long untilMillis)
+{
+  unsigned long currentMillis = millis();
+  return (currentMillis < untilMillis);
+}
+
 
 void transmitSensorInputs() {
   // read the input pin:
@@ -129,9 +135,20 @@ void loop() {
     togglePower();
   }
   
-  if (cycleCheck(&switchLastMillis, switchCycle))
+  if (timeCheck(switchOnUntilMillis))
   {
     // set switch pin
+    digitalWrite(switchPin, HIGH);
   }
 }
 
+void serialEvent() {
+  while (Serial.available()) {
+
+    char inChar = (char)Serial.read(); 
+
+    if (inChar == 'X') {
+      switchOnUntilMillis = millis() + switchCycle;
+    } 
+  }
+}
