@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     rpiServer = RPiServer()
     serverThread = threading.Thread(target = rpiServer.startServer, args = RPISERVER_ADDRESS)
-    serverThread.setDaemon(True)
+    serverThread.daemon = True
     serverThread.start()
 
     while 1:
